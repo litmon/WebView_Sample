@@ -6,53 +6,71 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity {
 
     WebView webView;
+    FrameLayout placeholder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        webView = (WebView)findViewById(R.id.webView);
-        webView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                return false;
-            }
-        });
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        Toast.makeText(this, "onCreate has called.", Toast.LENGTH_SHORT).show();
 
-        if(savedInstanceState == null){
+        placeholder = (FrameLayout) findViewById(R.id.placeholder);
+
+        if (webView == null) {
+            webView = new WebView(this);
+            webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            webView.setWebViewClient(new WebViewClient());
+            webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl("http://syncer.jp/_demo/javascript/jquery-modal-window/modal.html");
         }
 
-        webView.getSettings().setJavaScriptEnabled(true);
+        placeholder.addView(webView);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        Toast.makeText(this, "onRestoreInstanceState has called.", Toast.LENGTH_SHORT).show();
+
         super.onRestoreInstanceState(savedInstanceState);
         webView.restoreState(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Toast.makeText(this, "onSaveInstanceState has called.", Toast.LENGTH_SHORT).show();
+
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        Toast.makeText(this, "onConfigurationChanged has called.", Toast.LENGTH_SHORT).show();
+
+        if (webView != null) {
+            placeholder.removeView(webView);
+        }
+
         super.onConfigurationChanged(newConfig);
+
+        setContentView(R.layout.activity_main);
+
+        placeholder = (FrameLayout) findViewById(R.id.placeholder);
+        placeholder.addView(webView);
     }
 
     @Override
