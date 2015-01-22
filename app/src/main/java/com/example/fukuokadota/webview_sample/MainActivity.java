@@ -1,5 +1,6 @@
 package com.example.fukuokadota.webview_sample;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -32,9 +33,16 @@ public class MainActivity extends ActionBarActivity {
         if (webView == null) {
             webView = new WebView(this);
             webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            webView.setWebViewClient(new WebViewClient());
+            webView.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    Toast.makeText(MainActivity.this, "shouldOverrideUrlLoading called. [" + url + "]", Toast.LENGTH_SHORT).show();
+
+                    return super.shouldOverrideUrlLoading(view, url);
+                }
+            });
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("http://syncer.jp/_demo/javascript/jquery-modal-window/modal.html");
+            webView.loadUrl("https://minmoo.mtlsb.jp/event/f81c461d-efde-4ea3-ad39-0e9fee6cc57d");
         }
 
         placeholder.addView(webView);
