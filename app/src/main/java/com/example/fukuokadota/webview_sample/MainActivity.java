@@ -3,8 +3,10 @@ package com.example.fukuokadota.webview_sample;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +19,8 @@ import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import im.delight.android.webview.AdvancedWebView;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -24,6 +28,7 @@ public class MainActivity extends ActionBarActivity {
     FrameLayout placeholder;
 
     ValueCallback<Uri> mUploadMessage;
+    ValueCallback<Uri[]> mFilePathCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,31 +40,8 @@ public class MainActivity extends ActionBarActivity {
         placeholder = (FrameLayout) findViewById(R.id.placeholder);
 
         if (webView == null) {
-            webView = new WebView(this);
+            webView = new AdvancedWebView(this);
             webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            webView.setWebViewClient(new WebViewClient() {
-                @Override
-                public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                    return super.shouldOverrideUrlLoading(view, url);
-                }
-            });
-            webView.setWebChromeClient(new WebChromeClient() {
-                public void openFileChooser(ValueCallback<Uri> uploadMsg) {
-                    mUploadMessage = uploadMsg;
-                    Intent i = new Intent(Intent.ACTION_GET_CONTENT);
-                    i.addCategory(Intent.CATEGORY_OPENABLE);
-                    i.setType("movie/*");
-                    startActivityForResult(Intent.createChooser(i, "Image Browser"), 1);
-                }
-
-                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
-                    openFileChooser(uploadMsg);
-                }
-
-                public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
-                    openFileChooser(uploadMsg);
-                }
-            });
 
             webView.getSettings().setJavaScriptEnabled(true);
             webView.loadUrl("https://minmoo.mtlsb.jp/event/f81c461d-efde-4ea3-ad39-0e9fee6cc57d");
@@ -71,7 +53,6 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
-        Toast.makeText(this, "onRestoreInstanceState has called.", Toast.LENGTH_SHORT).show();
 
         super.onRestoreInstanceState(savedInstanceState);
         webView.restoreState(savedInstanceState);
