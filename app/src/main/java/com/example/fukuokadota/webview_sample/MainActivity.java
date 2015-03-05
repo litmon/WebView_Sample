@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
             webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             webView.getSettings().setJavaScriptEnabled(true);
-            webView.loadUrl("https://minmoo.mtlsb.jp/event/f81c461d-efde-4ea3-ad39-0e9fee6cc57d");
+            webView.loadUrl("google.com");
         }
 
         placeholder.addView(webView);
@@ -52,24 +52,18 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
-
-
         super.onRestoreInstanceState(savedInstanceState);
         webView.restoreState(savedInstanceState);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        Toast.makeText(this, "onSaveInstanceState has called.", Toast.LENGTH_SHORT).show();
-
         super.onSaveInstanceState(outState);
         webView.saveState(outState);
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        Toast.makeText(this, "onConfigurationChanged has called.", Toast.LENGTH_SHORT).show();
-
         if (webView != null) {
             placeholder.removeView(webView);
         }
@@ -80,27 +74,5 @@ public class MainActivity extends ActionBarActivity {
 
         placeholder = (FrameLayout) findViewById(R.id.placeholder);
         placeholder.addView(webView);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
